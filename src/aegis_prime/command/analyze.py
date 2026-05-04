@@ -1,0 +1,14 @@
+# aegis_prime.command.analyze
+
+import typer
+from aegis_prime.command.explain import explain_app
+from aegis_prime.core.analyzer import analyze_results
+
+app = typer.Typer(invoke_without_command=True)
+
+@app.callback()
+def main(ctx: typer.Context):
+    if ctx.invoked_subcommand is None:
+        analyze_results()
+
+app.add_typer(explain_app, name="explain")

@@ -1,0 +1,148 @@
+[
+    {
+        "cluster_id": 0,
+        "error_type": "AssertionError",
+        "message": "def test_dict():\n        target = {'a':1, 'b':2, 'c':3}\n>       assert 2 in target\nE       AssertionError: assert 2 in {'a': 1, 'b': 2, 'c': 3}\n\ntests/test_collections.py:4: AssertionError",
+        "signature": "AssertionError:assert_in:<num><dict>",
+        "files": [
+            [
+                "test_dict",
+                "test_collections.py",
+                "tests",
+                "app",
+                ""
+            ]
+        ],
+        "line": 1,
+        "tests": [
+            "tests/test_collections.py::test_dict"
+        ],
+        "stack_traces": [
+            [
+                "def test_dict():\n        target = {'a':1, 'b':2, 'c':3}\n>       assert 2 in target\nE       AssertionError: assert 2 in {'a': 1, 'b': 2, 'c': 3}\n\ntests/test_collections.py:4: AssertionError"
+            ]
+        ],
+        "frequency": 1,
+        "status": "open",
+        "severity": "low"
+    },
+    {
+        "cluster_id": 1,
+        "error_type": "AssertionError",
+        "message": "def test_literal_error():\n>       assert 'z' in \"Hello World\"\nE       AssertionError: assert 'z' in 'Hello World'\n\ntests/test_primitives.py:12: AssertionError",
+        "signature": "AssertionError:assert_in:<str><str>",
+        "files": [
+            [
+                "test_literal_error",
+                "test_primitives.py",
+                "tests",
+                "app",
+                ""
+            ]
+        ],
+        "line": 10,
+        "tests": [
+            "tests/test_primitives.py::test_literal_error"
+        ],
+        "stack_traces": [
+            [
+                "def test_literal_error():\n>       assert 'z' in \"Hello World\"\nE       AssertionError: assert 'z' in 'Hello World'\n\ntests/test_primitives.py:12: AssertionError"
+            ]
+        ],
+        "frequency": 1,
+        "status": "open",
+        "severity": "low"
+    },
+    {
+        "cluster_id": 2,
+        "error_type": "AssertionError",
+        "message": "def test_bool_error():\n>       assert True == False\nE       assert True == False\n\ntests/test_primitives.py:15: AssertionError",
+        "signature": "AssertionError:assert_eq:<bool><op><bool>",
+        "files": [
+            [
+                "test_bool_error",
+                "test_primitives.py",
+                "tests",
+                "app",
+                ""
+            ]
+        ],
+        "line": 13,
+        "tests": [
+            "tests/test_primitives.py::test_bool_error"
+        ],
+        "stack_traces": [
+            [
+                "def test_bool_error():\n>       assert True == False\nE       assert True == False\n\ntests/test_primitives.py:15: AssertionError"
+            ]
+        ],
+        "frequency": 1,
+        "status": "open",
+        "severity": "low"
+    },
+    {
+        "cluster_id": "3:4",
+        "error_type": "AssertionError",
+        "message": "def test_number_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:18: AssertionError, def test_number_signature_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:21: AssertionError",
+        "signature": "AssertionError:assert_eq:<num><op><num>",
+        "files": [
+            [
+                "test_number_error",
+                "test_primitives.py",
+                "tests",
+                "app",
+                ""
+            ],
+            [
+                "test_number_signature_error",
+                "test_primitives.py",
+                "tests",
+                "app",
+                ""
+            ]
+        ],
+        "line": 0,
+        "tests": [
+            "tests/test_primitives.py::test_number_error",
+            "tests/test_primitives.py::test_number_signature_error"
+        ],
+        "stack_traces": [
+            [
+                "def test_number_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:18: AssertionError"
+            ],
+            [
+                "def test_number_signature_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:21: AssertionError"
+            ]
+        ],
+        "frequency": 1,
+        "status": "open",
+        "severity": "low"
+    },
+    {
+        "cluster_id": 5,
+        "error_type": "AssertionError",
+        "message": "def test_number_exception():\n        start = 0\n        end = 1\n>       assert start > end\nE       assert 0 > 1\n\ntests/test_primitives.py:26: AssertionError",
+        "signature": "AssertionError:assert_gt:<op>",
+        "files": [
+            [
+                "test_number_exception",
+                "test_primitives.py",
+                "tests",
+                "app",
+                ""
+            ]
+        ],
+        "line": 22,
+        "tests": [
+            "tests/test_primitives.py::test_number_exception"
+        ],
+        "stack_traces": [
+            [
+                "def test_number_exception():\n        start = 0\n        end = 1\n>       assert start > end\nE       assert 0 > 1\n\ntests/test_primitives.py:26: AssertionError"
+            ]
+        ],
+        "frequency": 1,
+        "status": "open",
+        "severity": "low"
+    }
+]

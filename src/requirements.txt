@@ -1,0 +1,12 @@
+# console pretty print
+rich
+
+# testing framework
+pytest
+pytest-json-report
+
+# used for CLI functions
+typer
+
+# used to make aegis whl file
+build

@@ -1,0 +1,98 @@
+[
+    {
+        "error_type": "AssertionError",
+        "message": "def test_dict():\n        target = {'a':1, 'b':2, 'c':3}\n>       assert 2 in target\nE       AssertionError: assert 2 in {'a': 1, 'b': 2, 'c': 3}\n\ntests/test_collections.py:4: AssertionError",
+        "files": [
+            "test_dict",
+            "test_collections.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 1,
+        "tests": "tests/test_collections.py::test_dict",
+        "stack_traces": [
+            "def test_dict():\n        target = {'a':1, 'b':2, 'c':3}\n>       assert 2 in target\nE       AssertionError: assert 2 in {'a': 1, 'b': 2, 'c': 3}\n\ntests/test_collections.py:4: AssertionError"
+        ]
+    },
+    {
+        "error_type": "AssertionError",
+        "message": "def test_literal_error():\n>       assert 'z' in \"Hello World\"\nE       AssertionError: assert 'z' in 'Hello World'\n\ntests/test_primitives.py:12: AssertionError",
+        "files": [
+            "test_literal_error",
+            "test_primitives.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 10,
+        "tests": "tests/test_primitives.py::test_literal_error",
+        "stack_traces": [
+            "def test_literal_error():\n>       assert 'z' in \"Hello World\"\nE       AssertionError: assert 'z' in 'Hello World'\n\ntests/test_primitives.py:12: AssertionError"
+        ]
+    },
+    {
+        "error_type": "AssertionError",
+        "message": "def test_bool_error():\n>       assert True == False\nE       assert True == False\n\ntests/test_primitives.py:15: AssertionError",
+        "files": [
+            "test_bool_error",
+            "test_primitives.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 13,
+        "tests": "tests/test_primitives.py::test_bool_error",
+        "stack_traces": [
+            "def test_bool_error():\n>       assert True == False\nE       assert True == False\n\ntests/test_primitives.py:15: AssertionError"
+        ]
+    },
+    {
+        "error_type": "AssertionError",
+        "message": "def test_number_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:18: AssertionError",
+        "files": [
+            "test_number_error",
+            "test_primitives.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 16,
+        "tests": "tests/test_primitives.py::test_number_error",
+        "stack_traces": [
+            "def test_number_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:18: AssertionError"
+        ]
+    },
+    {
+        "error_type": "AssertionError",
+        "message": "def test_number_signature_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:21: AssertionError",
+        "files": [
+            "test_number_signature_error",
+            "test_primitives.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 19,
+        "tests": "tests/test_primitives.py::test_number_signature_error",
+        "stack_traces": [
+            "def test_number_signature_error():\n>       assert 2 == 1\nE       assert 2 == 1\n\ntests/test_primitives.py:21: AssertionError"
+        ]
+    },
+    {
+        "error_type": "AssertionError",
+        "message": "def test_number_exception():\n        start = 0\n        end = 1\n>       assert start > end\nE       assert 0 > 1\n\ntests/test_primitives.py:26: AssertionError",
+        "files": [
+            "test_number_exception",
+            "test_primitives.py",
+            "tests",
+            "app",
+            ""
+        ],
+        "line": 22,
+        "tests": "tests/test_primitives.py::test_number_exception",
+        "stack_traces": [
+            "def test_number_exception():\n        start = 0\n        end = 1\n>       assert start > end\nE       assert 0 > 1\n\ntests/test_primitives.py:26: AssertionError"
+        ]
+    }
+]
