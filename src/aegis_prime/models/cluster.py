@@ -1,11 +1,19 @@
+
+from aegis_prime.core.model_enums import ErrorType, Severity, Status
 from dataclasses import dataclass, field
 from aegis_prime.models.base import BaseCluster
 from aegis_prime.models.failure import FailureCluster
 from aegis_prime.core.model_enums import Severity, Status
 from aegis_prime.strategies.signature import SignatureStrategy, DefaultSignatureStrategy
+from aegis_prime.core.model_registry import aegis_model
+from aegis_prime.orm.model import Model
+from aegis_prime.aql.adapter.dataset import Dataset
+from aegis_prime.core.settings import CLUSTER
+import json
 
+@aegis_model("clusters")
 @dataclass
-class ClusterModel(BaseCluster):
+class ClusterModel(BaseCluster, Model):
     cluster_id: int = 0
     frequency: int = 1
     severity: Severity = Severity.LOW
@@ -15,6 +23,11 @@ class ClusterModel(BaseCluster):
     _signature_strategy: SignatureStrategy = field(
         default_factory=DefaultSignatureStrategy
     )
+
+    @classmethod
+    def to_dataset(cls):
+        rows = load_clusters()  # list[ClusterModel]
+        return Dataset(rows, cls)
 
     def signature(self) -> str:
         self._signature = f"{self.error_type.value}:{self._signature_strategy.generate(self.message)}"
@@ -70,3 +83,44 @@ class ClusterModel(BaseCluster):
             tests=tests,
             stack_traces=stack_traces,
         )
+    
+def load_clusters() -> list[ClusterModel]:
+    with open(CLUSTER) as f:
+        data = json.load(f)
+
+    clusters = []
+    for c in data:
+        clusters.append(
+            ClusterModel(
+                cluster_id=c["cluster_id"],
+                error_type=ErrorType(c["error_type"]),
+                frequency=int(c["frequency"]),
+                severity=Severity(c["severity"]),
+                message=c["message"],
+                tests=c["tests"],
+                files=c["files"],
+                stack_traces=c["stack_traces"],
+            )
+        )
+
+    return clusters
+    # -------- Projections ---------
+
+# @aegis_model("hot_cluster")
+# class HotCluster(ClusterModel):
+#     __where__ = {"severity": "high"}
+# 
+# @aegis_model("cold_cluster")
+# class ColdCluster(ClusterModel):
+#     __where__ = {"severity": "low"}
+#     __fields__ = ["cluster_id", "error_type"]
+#     def __init__(self):
+#         ColdCluster.all()
+# 
+# @aegis_model("first_hot_cluster")
+# class FirstHotCluster(HotCluster):
+#     __where__ = {"cluster_id": 1}
+# 
+# @aegis_model("first_cold_cluster")
+# class FirstColdCluster(ColdCluster):
+#     __where__ = {"cluster_id": 1}

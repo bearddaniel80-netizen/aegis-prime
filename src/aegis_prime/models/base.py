@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from aegis_prime.core.model_enums import ErrorType
+from aegis_prime.orm.model import Model
 
 @dataclass
 class BaseCluster(ABC):
@@ -16,11 +17,3 @@ class BaseCluster(ABC):
     @abstractmethod
     def signature(self) -> str:
         pass
-
-    def add_test(self, test: str):
-        if test not in self.tests:
-            self.tests.append(test)
-
-    def add_trace(self, trace: str):
-        if trace not in self.stack_traces:
-            self.stack_traces.append(trace)
