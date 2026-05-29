@@ -1,0 +1,20 @@
+from .base import ASTNode
+
+class Identifier(ASTNode):
+    def __init__(self, name: str):
+        self.name = name
+
+    def __repr__(self):
+        return f"Identifier({self.name})"
+
+    def to_dict(self):
+        return {
+            "type": "identifier",
+            "name": self.name
+        }
+
+    def __eq__(self, other):
+        return isinstance(other, Identifier) and self.name == other.name
+
+    def __hash__(self):
+        return hash((Identifier, self.name))
