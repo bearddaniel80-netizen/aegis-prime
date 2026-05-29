@@ -9,8 +9,11 @@ description = "Testing intelligence platform for CI failure analysis"
 authors = [{ name = "Daniel Beard" }]
 requires-python = ">=3.10"
 dependencies = [
-    "typer",
+    "typer", "tomli-w", "rich", "scapy", "pefile", "protobuf",
+    "py7zr", "pyarrow", "pyelftools", "pyyaml", 
+    "avro"
 ]
 
 [project.scripts]
 aegis = "aegis_prime.cli:app"
+aql-test = "aegis_prime.aql_compliance.runner:main"

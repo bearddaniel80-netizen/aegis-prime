@@ -5,6 +5,19 @@ rich
 pytest
 pytest-json-report
 
+# writes out config file
+tomli-w
+
+# supports adapter
+avro
+pefile
+protobuf
+py7zr
+pyarrow
+pyelftools
+pyyaml
+scapy
+
 # used for CLI functions
 typer
 

@@ -20,7 +20,7 @@ paged_cat() {
 }
 
 run_and_echo() {
-    cmd="$*"
+    local cmd="$*"
 
     # Ask for confirmation
     read -p "Run this command? '$cmd' [y/N]: " confirm
@@ -40,24 +40,16 @@ run_and_echo() {
 
 run_and_echo pytest tests --json-report --json-report-file=data/aegis_last_run.json
 
-run_and_echo paged_cat data/aegis_last_run.json
-
-sleep 2
-
 run_and_echo aegis analyze
 
-sleep 2
-
-clear
-
-# run_and_echo paged_cat data/aegis_production.json
-
-# run_and_echo paged_cat data/aegis_clusters.json
-
 run_and_echo aegis analyze explain
-
-sleep 3
 
 run_and_echo aegis report
 
 # run_and_echo paged_cat data/aegis_report.html
+
+# [project.entry-points."aegis_prime.dialects"]
+# mssql = "aegis_plugin_mssql.dialect:MSSQLDialect"
+
+# [project.entry-points."aegis_prime.sources"]
+# stdin = "aegis_plugin_stdin.source:stdin_source_factory"
