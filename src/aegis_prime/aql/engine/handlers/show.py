@@ -1,0 +1,81 @@
+from .base import BaseHandler
+from aegis_prime.aql.language.ast.statements.show import Show
+from aegis_prime.aql.language.ast.statements.describe import Describe
+from aegis_prime.aql.adapter.source.base import StdinSource
+from ..registry import register_handler
+from aegis_prime.aql.link.registry import FUNCTION_CALL_REGISTRY
+from aegis_prime.aql.link import fn_call
+from aegis_prime.aql.language.ast.function_call import TableFunctionCall
+from aegis_prime.aql.language.ast.expressions.literals import Literal
+
+from aegis_prime.aql.adapter.row import RowAdapter
+from aegis_prime.aql.schema.runner import Pipeline
+from aegis_prime.aql.schema.normalizer import NormalizeStage
+from aegis_prime.aql.schema.project import ProjectStage
+from aegis_prime.aql.schema.show import ShowStage
+from aegis_prime.aql.schema.describe import DescribeStage
+from aegis_prime.aql.schema.inspector import SchemaInspector
+
+
+@register_handler
+class ShowHandler(BaseHandler):
+    def __init__(self, engine_context):
+        self.data_sources = engine_context.data_sources
+        self.source_resolver = engine_context.source_resolver
+        self.engine_context = engine_context
+        self.inspector = SchemaInspector()
+
+    def can_handle(self, ast):
+        return isinstance(ast, (Show, Describe))
+
+    def handle(self, ast):
+        if(isinstance(ast.target, TableFunctionCall)):
+            return self.handle_fn_call(ast)
+
+        if ast.target == "sources":
+            return list(self.data_sources.keys())
+
+        if ast.target not in self.data_sources:
+            raise ValueError(f"Unknown target: {ast.target}")
+
+        data, model_cls = self.source_resolver.resolve(ast.target, True)
+
+        # 🔥 DESCRIBE path
+        if isinstance(ast, Describe):
+            if isinstance(model_cls, StdinSource):
+                return model_cls.schema()
+            pipeline = Pipeline([
+                DescribeStage(self.engine_context, self.inspector, model_cls)
+            ])
+            return pipeline.run(data)
+
+        # 🔥 SHOW path (rows)
+        pipeline = Pipeline([
+            NormalizeStage(data),
+            ProjectStage(self.engine_context, RowAdapter.get(ast, "fields")),
+            ShowStage(data),
+        ])
+
+        return pipeline.run(data)
+
+    def handle_fn_call(self, ast):
+        fn_name = ast.target.name
+
+        fn_cls = FUNCTION_CALL_REGISTRY.get(fn_name)
+
+        fn = fn_cls()
+
+        raw = ast.target.arg
+
+        if isinstance(raw, Literal):
+            raw = raw.value
+
+        source = fn.execute(raw)
+
+        if(isinstance(ast, Show)):
+            return source.as_rows()
+        
+        pipeline = Pipeline([
+            DescribeStage(self.engine_context, self.inspector, source.schema())
+        ])
+        return pipeline.run(source)
