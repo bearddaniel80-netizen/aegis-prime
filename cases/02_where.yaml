@@ -1,0 +1,38 @@
+- id: where_basic
+  description: Filter rows with condition
+  input:
+    format: json
+    data: |
+      [
+        {"name": "a", "age": 10},
+        {"name": "b", "age": 20}
+      ]
+  query: SELECT name WHERE age > 10
+  expected:
+    stdout: |
+      b
+
+- id: where_equals
+  description: Equality filter
+  input:
+    format: json
+    data: |
+      [
+        {"name": "a"},
+        {"name": "b"}
+      ]
+  query: SELECT name WHERE name = "a"
+  expected:
+    stdout: |
+      a
+
+- id: where_no_match
+  description: No rows match
+  input:
+    format: json
+    data: |
+      [{"name": "a"}]
+  query: SELECT name WHERE name = "z"
+  expected:
+    stdout: |
+      

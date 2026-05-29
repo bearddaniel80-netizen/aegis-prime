@@ -26,6 +26,8 @@ RUN python -m build
 
 RUN pip install /app/dist/*.whl
 
+COPY cases/ tests
+
 RUN chmod -R +x *
 
 # RUN mkdir -p data \

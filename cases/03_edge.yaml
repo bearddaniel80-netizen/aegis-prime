@@ -1,0 +1,40 @@
+- id: empty_input
+  description: Empty array
+  input:
+    format: json
+    data: |
+      []
+  query: SELECT name
+  expected:
+    stdout: |
+      
+
+- id: nested_field
+  description: Nested field access
+  input:
+    format: json
+    data: |
+      [
+        {"user": {"name": "a"}},
+        {"user": {"name": "b"}}
+      ]
+  query: SELECT user.name
+  expected:
+    stdout: |
+      a
+      b
+
+- id: mixed_types
+  description: Handle mixed types gracefully
+  input:
+    format: json
+    data: |
+      [
+        {"name": "a"},
+        {"name": 123}
+      ]
+  query: SELECT name
+  expected:
+    stdout: |
+      a
+      123

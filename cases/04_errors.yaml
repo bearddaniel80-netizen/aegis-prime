@@ -1,0 +1,32 @@
+- id: syntax_error
+  description: Invalid query syntax
+  input:
+    format: json
+    data: |
+      [{"name": "a"}]
+  query: SELEC name
+  expected:
+    exit_code: 1
+    stderr: syntax error
+
+- id: invalid_operator
+  description: Unsupported operator
+  input:
+    format: json
+    data: |
+      [{"age": 10}]
+  query: SELECT age WHERE age >> 5
+  expected:
+    exit_code: 1
+    stderr: invalid operator
+
+- id: invalid_json
+  description: Malformed input
+  input:
+    format: json
+    data: |
+      [{"name": "a"
+  query: SELECT name
+  expected:
+    exit_code: 1
+    stderr: invalid json

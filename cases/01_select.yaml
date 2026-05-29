@@ -1,0 +1,40 @@
+- id: select_single_field
+  description: Select one field from array
+  input:
+    format: json
+    data: |
+      [
+        {"name": "a"},
+        {"name": "b"}
+      ]
+  query: SELECT name
+  expected:
+    stdout: |
+      a
+      b
+
+- id: select_multiple_fields
+  description: Select multiple fields
+  input:
+    format: json
+    data: |
+      [
+        {"name": "a", "age": 10},
+        {"name": "b", "age": 20}
+      ]
+  query: SELECT name, age
+  expected:
+    stdout: |
+      a 10
+      b 20
+
+- id: select_missing_field
+  description: Missing field should return null/empty
+  input:
+    format: json
+    data: |
+      [{"name": "a"}]
+  query: SELECT age
+  expected:
+    stdout: |
+      
