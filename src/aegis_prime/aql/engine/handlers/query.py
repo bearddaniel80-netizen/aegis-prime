@@ -14,7 +14,10 @@ class QueryHandler(BaseHandler):
         return isinstance(ast, Query)
 
     def handle(self, query):
-        data = self.engine_context.source_resolver.resolve(query.source)
+        if query.source.name == "stdin":
+            data, model_cls = self.engine_context.source_resolver.resolve(query.source)
+        else:
+            data = self.engine_context.source_resolver.resolve(query.source)
 
         if data is None:
             raise ValueError(f"Unknown source: {query.source}")
