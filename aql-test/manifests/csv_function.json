@@ -1,0 +1,26 @@
+{
+  "name": "csv_file",
+  "input": {
+    "type": "file",
+    "source": "csv",
+    "fixture": "data.csv"
+  },
+  "fields": ["name", "age"],
+  "filters": [
+    { "field": "name", "operator": "!=", "value": "bob" },
+    { "field": "name", "operator": "=", "value": "Bob" },
+    { "field": "name", "operator": "IN", "value": ["Bob", "Adam"] },
+    { "field": "age", "operator": ">", "value": 26 },
+    { "field": "age", "operator": "<", "value": 46 },
+    { "field": "age", "operator": ">=", "value": 26 },
+    { "field": "age", "operator": "<=", "value": 46 },
+    { "field": "age", "operator": "=", "value": 26 },
+    { "field": "age", "operator": "!=", "value": 2 },
+    { "field": "age", "operator": "IN", "value": [26,46] }
+  ],
+  "tags": [
+    "table_function",
+    "csv",
+    "file"
+  ]
+}

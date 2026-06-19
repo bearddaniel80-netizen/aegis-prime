@@ -1,0 +1,32 @@
+# console pretty print
+rich
+
+# testing framework
+pytest
+pytest-json-report
+
+# writes out config file
+tomli-w
+
+# supports adapter
+avro
+pefile
+protobuf
+py7zr
+pyarrow
+pyelftools
+pyyaml
+scapy
+
+# used by AQL testing
+jinja2
+duckdb
+fastavro
+reportlab
+pandas
+
+# used for CLI functions
+typer
+
+# used to make aegis whl file
+build

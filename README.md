@@ -16,8 +16,13 @@ Aegis consists of several complementary components:
 | Aegis Core | Test execution and orchestration |
 | Aegis Prime | Failure intelligence and AI analysis |
 | AQL | Universal query language for systems, data, APIs, files, and infrastructure |
+| AQL Compliance Framework | Certification and regression-testing system for AQL implementations, dialects, sources, and future connect |
 
-➡️ See the AQL documentation: ./aql/README.md
+➡️ See the AQL documentation:
+   ./aql/README.md
+
+➡️ See the AQL Compliance Framework documentation:
+   ./aql-compliance.md
 ---
 
 # ⚡ Aegis

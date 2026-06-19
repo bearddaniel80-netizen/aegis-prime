@@ -1,35 +1,80 @@
-# -------- Stage 1: Builder --------
-FROM python:3.12-slim AS builder
+# ---------- deps ----------
+FROM python:3.12-slim AS deps
 
-WORKDIR /app
+WORKDIR /build
 
-# Copy only requirements first (better caching)
-COPY src/requirements.txt .
+COPY requirements.txt .
 
-# Install Python deps into a separate location
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+RUN pip install --no-cache-dir \
+    --prefix=/install \
+    -r requirements.txt
 
-# -------- Stage 2: Final Runtime --------
-FROM python:3.12-slim
+# ---------- traceplan ----------
+FROM deps AS traceplan
 
-ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages
+COPY --from=deps /install /usr/local
 
-# Copy installed Python packages
-COPY --from=builder /install /usr/local
-
-WORKDIR /app
-
-# Copy application code
-COPY src/ .
+COPY src-traceplan/ .
 
 RUN python -m build
 
-RUN pip install /app/dist/*.whl
+RUN mv dist/*.whl /tmp/
 
-COPY cases/ tests
+RUN pip install /tmp/*.whl
 
-RUN chmod -R +x *
+WORKDIR /app
 
-# RUN mkdir -p data \
-#     && touch data/production.log \
-#     && pytest tests > data/.aegis_last_run.txt
+COPY traceplan-data .
+
+# ---------- aql compliance ----------
+FROM deps AS compliance
+
+COPY --from=deps /install /usr/local
+
+COPY src-aql-compliance .
+
+RUN python -m build
+
+RUN mv dist/*.whl /tmp/
+
+RUN pip install /tmp/*.whl
+
+WORKDIR /app
+
+COPY aql-test .
+
+# ---------- aegis ----------
+FROM deps AS aegis
+
+COPY --from=deps /install /usr/local
+
+COPY src .
+
+RUN python -m build
+
+RUN mv dist/*.whl /tmp/
+
+RUN pip install /tmp/*.whl
+
+WORKDIR /app
+
+COPY aegis .
+
+# ---------- runtime ----------
+FROM python:3.12-slim AS runtime
+
+COPY --from=deps /install /usr/local
+
+COPY --from=compliance /tmp/*.whl /tmp
+RUN pip install /tmp/*.whl
+
+COPY --from=aegis /tmp/*.whl /tmp/
+RUN pip install /tmp/*.whl
+
+WORKDIR /app
+
+COPY --from=compliance /app .
+
+COPY --from=aegis /app .
+
+# CMD ["aegis"]
