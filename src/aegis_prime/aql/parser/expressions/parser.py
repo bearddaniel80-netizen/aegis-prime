@@ -8,6 +8,9 @@ class ExpressionParser:
         "=": 10,
         "<": 10,
         ">": 10,
+        "!=": 10,
+        "<=": 10,
+        ">=": 10,
         "IN": 20,
     }
 
@@ -21,7 +24,7 @@ class ExpressionParser:
 
             if tok.type == TokenType.IN:
                 op = "IN"
-            elif tok.type in (TokenType.EQ, TokenType.LT, TokenType.GT):
+            elif tok.type in (TokenType.EQ, TokenType.LT, TokenType.GT, TokenType.NEQ, TokenType.LTE, TokenType.GTE):
                 op = tok.value
             else:
                 break
@@ -66,3 +69,6 @@ class ExpressionParser:
         ctx.expect(TokenType.RBRACK)
 
         return InOp(left, values)
+
+    def parse_compond_operators(self, ctx):
+        pass
