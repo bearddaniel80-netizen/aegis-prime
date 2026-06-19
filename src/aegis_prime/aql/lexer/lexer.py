@@ -9,6 +9,10 @@ class Lexer:
         self.current = text[0] if text else None
         self.readers = [cls() for cls in READER_REGISTRY]
 
+    def peek(self, lexer):
+        idx = lexer.i + 1
+        return lexer.text[idx] if idx < len(lexer.text) else None
+
     def advance(self):
         self.i += 1
         self.current = self.text[self.i] if self.i < len(self.text) else None

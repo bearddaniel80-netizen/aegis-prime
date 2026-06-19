@@ -6,7 +6,11 @@ from ..registry import register_readers
 
 @register_readers
 class OperatorReader(TokenReader):
+
     OPERATORS = {
+        "!=": TokenType.NEQ,
+        "<=": TokenType.LTE,
+        ">=": TokenType.GTE,
         "=": TokenType.EQ,
         "<": TokenType.LT,
         ">": TokenType.GT,
@@ -18,9 +22,23 @@ class OperatorReader(TokenReader):
     }
 
     def can_read(self, ch: str) -> bool:
-        return ch in self.OPERATORS
+        return ch in {"!", "<", ">", "=", "[", "]", ",", "(", ")"}
 
     def read(self, lexer):
+
         ch = lexer.current
+        nxt = self.peek(lexer)
+
+        compound = f"{ch}{nxt}" if nxt else None
+
+        if compound in self.OPERATORS:
+            lexer.advance()
+            lexer.advance()
+            return Token(self.OPERATORS[compound], compound)
+
         lexer.advance()
         return Token(self.OPERATORS[ch], ch)
+
+    def peek(self, lexer):
+        idx = lexer.i + 1
+        return lexer.text[idx] if idx < len(lexer.text) else None
