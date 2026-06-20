@@ -29,6 +29,26 @@ Aegis consists of several complementary components:
 
 ## Testing Intelligence for Modern Engineering Teams
 
+### 📦 Installation
+
+Build:
+
+```bash
+docker build \
+    --target runtime \
+    -t prime .
+```
+
+Run:
+
+```bash
+docker run -ti --rm \
+    -p 80:80 \
+    -v ./output:/app/data \
+    prime bash
+```
+---
+
 ### 🎥 Watch Aegis in Action
 
 See real demos, walkthroughs, and feature showcases:

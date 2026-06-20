@@ -1,234 +1,306 @@
-# Aegis / Aegis Prime
+# AQL (Aegis Query Language)
 
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-92%25-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Status](https://img.shields.io/badge/status-production--ready-success)
+## AQL and Aegis
 
+AQL powers the data layer of the Aegis ecosystem.
+
+It enables Aegis to:
+
+- Query test results
+- Analyze failures
+- Correlate system events
+- Explore infrastructure state
+- Retrieve application telemetry
+- Build intelligent debugging workflows
+
+While AQL can be used independently, it serves as a foundational technology within Aegis Prime.
 ---
-## 🏗️ Project Structure
+## 📦 Installation
 
-Aegis consists of several complementary components:
+Build:
 
-| Component | Purpose |
-|------------|---------|
-| Aegis Core | Test execution and orchestration |
-| Aegis Prime | Failure intelligence and AI analysis |
-| AQL | Universal query language for systems, data, APIs, files, and infrastructure |
+```bash
+docker build \
+    --target runtime \
+    -t prime .
+```
 
-➡️ See the AQL documentation: ./aql/README.md
----
+Run:
 
-# ⚡ Aegis
-
-## Testing Intelligence for Modern Engineering Teams
-
-### 🎥 Watch Aegis in Action
-
-See real demos, walkthroughs, and feature showcases:
-
-➡️ [YouTube Playlist](https://www.youtube.com/playlist?list=PL2UX2VsIBUY0POiTGRRpyHesG_Oezvkba)
-
-### Table of Contents
-
-- Why Aegis Exists
-- What Aegis Does
-- AQL (Aegis Query Language)
-- Hero Architecture
-- What Makes It Different
-- Real-World Impact
-- Example Workflow
-- Designed for Modern Engineering
-- Vision
-- Roadmap
-- Built For
-- License
-
-> Turn failing tests into clear, actionable engineering decisions — not noise.
-
-Aegis is a **testing intelligence platform** that transforms raw test failures and logs into structured insights, root cause guidance, and prioritized fixes.
-
-Instead of spending hours digging through CI logs, teams get answers instantly:
-
-* What broke?
-* Why did it break?
-* Where should I look first?
-
-**Aegis removes the guesswork from debugging.**
-
+```bash
+docker run -ti --rm \
+    -p 80:80 \
+    -v ./output:/app/data \
+    prime bash
+```
 ---
 
-## 🚀 Why Aegis Exists
+## One Query Language. Any Data Source.
 
-Modern CI systems are fast — but not smart.
+AQL (Aegis Query Language) is a universal query language designed to query databases, APIs, files, streams, infrastructure, and application data through a single consistent interface.
 
-They tell you:
+Modern systems scatter information across dozens of technologies:
 
-> ❌ “Tests failed”
+- PostgreSQL
+- MySQL
+- MongoDB
+- Elasticsearch
+- Kafka
+- REST APIs
+- GraphQL
+- CSV files
+- JSON documents
+- Cloud services
+- Log platforms
 
-But not:
+Every source introduces its own query language, tooling, authentication model, and operational complexity.
 
-> ❓ “What actually matters?”
-
-Engineering teams waste time:
-
-* Scrolling through logs
-* Reproducing failures
-* Chasing duplicate issues
-* Interpreting unclear stack traces
-
-Aegis fixes this by turning raw test output into **structured intelligence for developers.**
+AQL provides a unified abstraction layer that allows engineers to query heterogeneous systems using a familiar SQL-inspired syntax.
 
 ---
 
-## 💡 What Aegis Does
+## Table of Contents
 
-### 🧠 1. Understands Failures
+- [AQL and Aegis](#aql-and-aegis)
+- [Why AQL Exists](#why-aql-exists)
+- [Core Principles](#core-principles)
+- [Getting Started](./getting-started.md)
+- [Example Queries](#example-queries)
+- [Beyond Traditional SQL](#beyond-traditional-sql)
+- [Documentation](./query-language.md)
+- [AQL Compliance Testing](#aql-compliance-testing)
+- [Architecture](#architecture)
+- [Current Focus](#current-focus)
+- [Vision](#vision)
 
-Groups related test failures so engineers don’t debug the same issue multiple times.
-
-### 🔗 2. Connects System Behavior
-
-Maps logs and failures back to services, APIs, and components.
-
-### ⚡ 3. Prioritizes What Matters
-
-Surfaces the most impactful failures first — not just the first one that appears.
-
-### 🤖 4. Explains With AI (Aegis Prime)
-
-Turns technical failures into human-readable explanations and likely root causes.
-
-## 🔍 AQL (Aegis Query Language)
-
-Aegis includes AQL, a universal query language that allows engineers to query databases, APIs, files, streams, and infrastructure through a single interface.
-
-➡️ See the full AQL documentation: [AQL README](./aql/README.md)
 ---
 
-## 🧭 Hero Architecture
+## Why AQL Exists
+
+Engineering teams spend enormous amounts of time switching contexts:
 
 ```text
-        CI / Test Pipeline (pytest, automation)
-                      │
-                      ▼
-        ┌────────────────────────────┐
-        │   Raw Test Results & Logs   │
-        └─────────────┬──────────────┘
-                      │
-                      ▼
-        ┌────────────────────────────┐
-        │   Aegis Intelligence Core   │
-        │                            │
-        │ • Failure Detection        │
-        │ • Pattern Grouping         │
-        │ • Log Correlation          │
-        └─────────────┬──────────────┘
-                      │
-                      ▼
-        ┌────────────────────────────┐
-        │     Aegis Prime AI Layer   │
-        │                            │
-        │ • Root Cause Analysis      │
-        │ • Natural Language Output  │
-        └─────────────┬──────────────┘
-                      │
-                      ▼
-        ┌────────────────────────────┐
-        │  Developer Action Layer    │
-        │                            │
-        │ • Grouped Failures        │
-        │ • Prioritized Insights    │
-        │ • Fix Recommendations     │
-        └────────────────────────────┘
+SQL for databases
+DSLs for search engines
+HTTP for APIs
+CLI commands for infrastructure
+Custom scripts for files
+```
+
+The result is fragmented tooling, duplicated logic, and increased operational complexity.
+
+AQL was created to answer a simple question:
+
+> What if every system could be queried through a common language?
+
+Instead of learning dozens of query interfaces, engineers can focus on the data itself.
+
+---
+
+## Core Principles
+
+### Universal Access
+
+Query any supported source using the same language.
+
+```sql
+SELECT * FROM postgres.users;
+SELECT * FROM mongodb.users;
+SELECT * FROM api('https://service/users');
+SELECT * FROM csv('users.csv');
+```
+
+### Source Independence
+
+Applications should not need to care where data originates.
+
+```sql
+SELECT id, name
+FROM customers;
+```
+
+Whether the source is PostgreSQL today or MongoDB tomorrow should not require rewriting business logic.
+
+### Federated Queries
+
+Join data across technologies.
+
+```sql
+SELECT
+    u.id,
+    u.name,
+    o.total
+FROM postgres.users u
+JOIN mongodb.orders o
+ON u.id = o.user_id;
+```
+
+### Extensible Architecture
+
+New sources can be added through adapters and dialects without changing the language itself.
+
+---
+
+## Example Queries
+
+### Query a Database
+
+```sql
+SELECT *
+FROM postgres.users
+WHERE active = true;
+```
+
+### Query a REST API
+
+```sql
+SELECT *
+FROM api('https://service.example.com/users');
+```
+
+### Query a CSV File
+
+```sql
+SELECT *
+FROM csv('users.csv')
+WHERE country = 'US';
+```
+
+### Query Kafka
+
+```sql
+SELECT *
+FROM kafka.orders
+LIMIT 100;
+```
+
+### Join Across Systems
+
+```sql
+SELECT
+    u.name,
+    o.total
+FROM postgres.users u
+JOIN mongodb.orders o
+ON u.id = o.user_id;
 ```
 
 ---
 
-## ⚙️ What Makes It Different
+## Beyond Traditional SQL
 
-Most tools stop at reporting.
+AQL is not intended to replace SQL.
 
-Aegis goes further:
+Instead, AQL extends SQL concepts into environments where SQL traditionally does not exist.
 
-| Traditional CI Tools | Aegis                           |
-| -------------------- | ------------------------------- |
-| Shows failures       | Explains failures               |
-| Dumps logs           | Correlates logs                 |
-| Manual debugging     | AI-assisted root cause analysis |
-| Flat output          | Structured intelligence         |
+Examples include:
 
----
+- APIs
+- Message queues
+- Configuration files
+- Infrastructure resources
+- Log streams
+- Binary formats
+- Test artifacts
+- Cloud platforms
 
-## ⚡ Real-World Impact
-
-Teams using Aegis aim to:
-
-* ⏱ Reduce debugging time (MTTR)
-* 🚀 Improve CI feedback speed
-* 🔍 Eliminate duplicate failure analysis
-* 🧠 Improve engineering decision-making speed
+This allows engineers to treat operational data the same way they treat relational data.
 
 ---
 
-## 🖥️ Example Workflow
 
-1. Developer pushes code
-2. CI runs test suite
-3. Aegis analyzes failures
-4. Failures are grouped + prioritized
-5. AI explains likely root cause
-6. Developer gets actionable next step — not raw logs
+## AQL Compliance Testing
 
----
+AQL includes a compliance testing framework designed to validate language behavior across supported features, sources, and execution paths.
 
-## 🔌 Designed for Modern Engineering
+The compliance suite helps ensure that queries produce consistent and predictable results as AQL evolves.
 
-Aegis is built to fit into existing workflows:
+Run the compliance suite:
 
-* Works with pytest-based pipelines
-* CI/CD compatible
-* Extensible analysis engine
-* AI provider optional (Aegis Prime layer)
+```bash
+aql-test --cases ./tests
+```
 
----
+The framework executes a collection of test cases covering areas such as:
 
-## 🧠 Vision
+* Source discovery (`SHOW`)
+* Schema inspection (`DESCRIBE`)
+* Query execution (`SELECT`)
+* Filtering (`WHERE`)
+* Collection matching (`IN`)
+* File-based sources
+* Standard input (`stdin`)
+* Aegis-native sources
 
-Aegis is part of a shift in engineering tools:
+Compliance coverage is continuously expanded as new language features and data sources are introduced.
 
-> From **observability dashboards** → to **decision intelligence systems**
+### Why Compliance Matters
 
-We believe the future of testing is not just detection — it’s **understanding.**
+As AQL grows to support additional databases, files, APIs, streams, and infrastructure sources, a standardized compliance suite helps verify that behavior remains consistent regardless of where data originates.
 
----
+The goal is simple:
 
-## 📈 Roadmap
+> A query should behave the same way across all supported AQL sources.
 
-* Web-based intelligence dashboard
-* GitHub Actions / GitLab CI integrations
-* Flaky test prediction engine
-* Real-time failure intelligence streams
-* Historical failure pattern learning
+### Contributing
 
----
+New language features and source adapters should include compliance tests whenever possible.
 
-## 🤝 Built For
-
-* Platform engineers
-* SRE teams
-* QA automation teams
-* Fast-moving startup engineering orgs
+This ensures behavior remains stable and helps prevent regressions as AQL continues to evolve.
 
 ---
 
-## 📄 License
+## Architecture
 
-MIT License
+```text
+             AQL Query
+
+                  │
+                  ▼
+
+          Query Planner
+                  │
+
+      ┌───────────┼───────────┐
+      │           │           │
+
+ PostgreSQL   MongoDB      Kafka
+      │           │           │
+
+      └───────────┼───────────┘
+                  │
+
+           Unified Result
+```
+
+AQL separates query execution from source implementation, allowing a single query to operate across many technologies.
 
 ---
 
-## ⚡ Closing Thought
+## Current Focus
 
-If CI tells you what broke, Aegis tells you what to do next.
+AQL is being developed to support:
+
+- Relational databases
+- Document databases
+- Graph databases
+- Search engines
+- APIs
+- Files
+- Message queues
+- Cloud services
+- Infrastructure platforms
+
+Additional adapters are added through an extensible dialect system.
+
+---
+
+## Vision
+
+The long-term vision of AQL is simple:
+
+> Query anything.
+
+Data should be accessible regardless of where it lives, how it is stored, or which vendor created it.
+
+AQL aims to provide a consistent, extensible, and developer-friendly way to interact with modern systems at scale.

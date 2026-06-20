@@ -39,7 +39,25 @@ Consistent Query Behavior
 The goal is not simply testing code.
 
 The goal is testing AQL itself.
+---
+# 📦 Installation
 
+Build:
+
+```bash
+docker build \
+    --target runtime \
+    -t prime .
+```
+
+Run:
+
+```bash
+docker run -ti --rm \
+    -p 80:80 \
+    -v ./output:/app/data \
+    prime bash
+```
 ---
 
 # Current Status
@@ -137,26 +155,6 @@ These formats exist to establish the future reporting API and extension points.
 
 ---
 
-# Docker
-
-Build:
-
-```bash
-docker build \
-    --target runtime \
-    -t prime .
-```
-
-Run:
-
-```bash
-docker run -ti --rm \
-    -p 80:80 \
-    -v ./output:/app/data \
-    prime bash
-```
-
----
 
 # Command Overview
 
