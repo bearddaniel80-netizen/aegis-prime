@@ -1,8 +1,8 @@
-# xml
+# CSV
 
-The `xml()` source allows AQL to query xml files using standard SQL-inspired syntax.
+The `xml()` source allows AQL to query CSV files using standard SQL-inspired syntax.
 
-xml files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
+CSV files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
 
 ---
 
@@ -14,7 +14,7 @@ List all available sources:
 aegis query "SHOW sources"
 ```
 
-Inspect a xml file:
+Inspect a CSV file:
 
 ```bash
 aegis query "SHOW xml('data.xml')"
@@ -40,11 +40,11 @@ department
 created_at
 ```
 
-Column names are automatically derived from the xml header row.
+Column names are automatically derived from the CSV header row.
 
 ---
 
-## Query a xml File
+## Query a CSV File
 
 Return all rows:
 
@@ -70,13 +70,55 @@ aegis query "SELECT id, name FROM xml('data.xml')"
 
 ## Filter Rows
 
-Retrieve records matching a condition:
+AQL supports the following filter operators when querying CSV files:
+
+| Operator | Description               |
+| -------- | ------------------------- |
+| `=`      | Equal to                  |
+| `!=`     | Not equal to              |
+| `>`      | Greater than              |
+| `>=`     | Greater than or equal to  |
+| `<`      | Less than                 |
+| `<=`     | Less than or equal to     |
+| `IN`     | Match any value in a list |
+
+### Equality
 
 ```bash
 aegis query "SELECT * FROM xml('data.xml') WHERE id = 1"
 ```
 
-Filter by multiple values:
+### Not Equal
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE department != 'Sales'"
+```
+
+### Greater Than
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id > 100"
+```
+
+### Greater Than or Equal
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id >= 100"
+```
+
+### Less Than
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id < 100"
+```
+
+### Less Than or Equal
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id <= 100"
+```
+
+### IN
 
 ```bash
 aegis query "SELECT * FROM xml('data.xml') WHERE id IN [1, 5]"
@@ -84,9 +126,9 @@ aegis query "SELECT * FROM xml('data.xml') WHERE id IN [1, 5]"
 
 ---
 
-## Query xml Data from Standard Input
+## Query CSV Data from Standard Input
 
-AQL can read xml data directly from stdin.
+AQL can read CSV data directly from stdin.
 
 Pipe a file into AQL:
 
@@ -112,9 +154,17 @@ Apply filters:
 cat data.xml | aegis query "SELECT * FROM stdin WHERE id = 1"
 ```
 
+```bash
+cat data.xml | aegis query "SELECT * FROM stdin WHERE id > 10"
+```
+
+```bash
+cat data.xml | aegis query "SELECT * FROM stdin WHERE id IN [1, 5]"
+```
+
 ---
 
-## Example xml File
+## Example CSV File
 
 ```xml
 id,name,email
@@ -165,10 +215,34 @@ aegis query "SELECT id, email FROM xml('data.xml')"
 
 ---
 
-### Filter Records
+### Find a Specific Record
 
 ```bash
 aegis query "SELECT * FROM xml('data.xml') WHERE id = 1"
+```
+
+---
+
+### Find Records Above a Threshold
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id > 100"
+```
+
+---
+
+### Exclude Records
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE department != 'Sales'"
+```
+
+---
+
+### Find Multiple Records
+
+```bash
+aegis query "SELECT * FROM xml('data.xml') WHERE id IN [1, 5]"
 ```
 
 ---
@@ -198,12 +272,52 @@ SELECT id, name
 FROM xml('data.xml')
 ```
 
-Filter records:
+Filter records by equality:
 
 ```sql
 SELECT *
 FROM xml('data.xml')
 WHERE id = 1
+```
+
+Filter records by inequality:
+
+```sql
+SELECT *
+FROM xml('data.xml')
+WHERE id != 1
+```
+
+Filter records above a value:
+
+```sql
+SELECT *
+FROM xml('data.xml')
+WHERE id > 100
+```
+
+Filter records at or above a value:
+
+```sql
+SELECT *
+FROM xml('data.xml')
+WHERE id >= 100
+```
+
+Filter records below a value:
+
+```sql
+SELECT *
+FROM xml('data.xml')
+WHERE id < 100
+```
+
+Filter records at or below a value:
+
+```sql
+SELECT *
+FROM xml('data.xml')
+WHERE id <= 100
 ```
 
 Filter multiple values:
@@ -220,7 +334,8 @@ WHERE id IN [1, 5]
 
 * json()
 * csv()
+* log()
 * yaml()
 * stdin
 
-All file-based sources support the same AQL query patterns, allowing you to work with structured data regardless of format.
+All file-based sources support the same AQL query patterns, including projection, filtering, and value matching through comparison operators and the `IN` operator.

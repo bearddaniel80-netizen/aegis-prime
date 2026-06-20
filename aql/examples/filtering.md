@@ -26,6 +26,22 @@ Only records matching the condition are returned.
 
 ---
 
+## Supported Operators
+
+AQL supports the following filtering operators:
+
+| Operator | Description               |
+| -------- | ------------------------- |
+| `=`      | Equal to                  |
+| `!=`     | Not equal to              |
+| `>`      | Greater than              |
+| `>=`     | Greater than or equal to  |
+| `<`      | Less than                 |
+| `<=`     | Less than or equal to     |
+| `IN`     | Match any value in a list |
+
+---
+
 ## Equality Filters
 
 Retrieve records where a field matches a value.
@@ -56,6 +72,92 @@ WHERE id = 1
 SELECT *
 FROM json('data.json')
 WHERE id = 1
+```
+
+---
+
+## Not Equal Filters
+
+Return records where a field does not match a value.
+
+```sql
+SELECT *
+FROM tests
+WHERE status != "passed"
+```
+
+```sql
+SELECT name, status
+FROM tests
+WHERE status != "passed"
+```
+
+---
+
+## Greater Than Filters
+
+Return records with values larger than the specified value.
+
+```sql
+SELECT *
+FROM failures
+WHERE count > 10
+```
+
+```sql
+SELECT *
+FROM tests
+WHERE duration_ms > 5000
+```
+
+---
+
+## Greater Than or Equal Filters
+
+```sql
+SELECT *
+FROM failures
+WHERE count >= 10
+```
+
+```sql
+SELECT *
+FROM tests
+WHERE duration_ms >= 5000
+```
+
+---
+
+## Less Than Filters
+
+Return records with values smaller than the specified value.
+
+```sql
+SELECT *
+FROM tests
+WHERE duration_ms < 1000
+```
+
+```sql
+SELECT *
+FROM failures
+WHERE count < 5
+```
+
+---
+
+## Less Than or Equal Filters
+
+```sql
+SELECT *
+FROM tests
+WHERE duration_ms <= 1000
+```
+
+```sql
+SELECT *
+FROM failures
+WHERE count <= 5
 ```
 
 ---
@@ -108,6 +210,12 @@ Select specific fields:
 
 ```bash
 cat data.json | aegis query "SELECT name FROM stdin WHERE id = 1"
+```
+
+Use comparison operators:
+
+```bash
+cat data.json | aegis query "SELECT * FROM stdin WHERE id > 10"
 ```
 
 Use IN filters:
@@ -164,6 +272,36 @@ WHERE cluster_id IN [1, 5]
 
 ---
 
+### Find Failed Tests
+
+```sql
+SELECT *
+FROM tests
+WHERE status != "passed"
+```
+
+---
+
+### Find Long-Running Tests
+
+```sql
+SELECT *
+FROM tests
+WHERE duration_ms > 5000
+```
+
+---
+
+### Find Small Failure Groups
+
+```sql
+SELECT *
+FROM failures
+WHERE count < 5
+```
+
+---
+
 ### Find Records in a CSV File
 
 ```sql
@@ -179,7 +317,7 @@ WHERE id = 1
 ```sql
 SELECT *
 FROM json('users.json')
-WHERE id = 1
+WHERE id >= 100
 ```
 
 ---
@@ -218,6 +356,30 @@ FROM source
 WHERE field IN [1, 2, 3]
 ```
 
+Find values greater than a threshold:
+
+```sql
+SELECT *
+FROM source
+WHERE field > value
+```
+
+Find values less than a threshold:
+
+```sql
+SELECT *
+FROM source
+WHERE field < value
+```
+
+Exclude values:
+
+```sql
+SELECT *
+FROM source
+WHERE field != value
+```
+
 Filter streamed data:
 
 ```sql
@@ -238,4 +400,4 @@ WHERE field = value
 * XML
 * YAML
 
-Filtering can be applied to any AQL source that returns structured records.
+Filtering can be applied to any AQL source that returns structured records. AQL currently supports single-condition filtering using comparison operators and the `IN` operator.

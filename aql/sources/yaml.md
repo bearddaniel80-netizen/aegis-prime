@@ -1,8 +1,8 @@
-# yml
+# CSV
 
-The `yaml()` source allows AQL to query yml files using standard SQL-inspired syntax.
+The `yaml()` source allows AQL to query CSV files using standard SQL-inspired syntax.
 
-yml files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
+CSV files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
 
 ---
 
@@ -14,10 +14,10 @@ List all available sources:
 aegis query "SHOW sources"
 ```
 
-Inspect a yml file:
+Inspect a CSV file:
 
 ```bash
-aegis query "SHOW yaml('data.yml')"
+aegis query "SHOW yaml('data.yaml')"
 ```
 
 ---
@@ -27,7 +27,7 @@ aegis query "SHOW yaml('data.yml')"
 View available columns:
 
 ```bash
-aegis query "DESCRIBE yaml('data.yml')"
+aegis query "DESCRIBE yaml('data.yaml')"
 ```
 
 Example output:
@@ -40,16 +40,16 @@ department
 created_at
 ```
 
-Column names are automatically derived from the yml header row.
+Column names are automatically derived from the CSV header row.
 
 ---
 
-## Query a yml File
+## Query a CSV File
 
 Return all rows:
 
 ```bash
-aegis query "SELECT * FROM yaml('data.yml')"
+aegis query "SELECT * FROM yaml('data.yaml')"
 ```
 
 ---
@@ -59,64 +59,114 @@ aegis query "SELECT * FROM yaml('data.yml')"
 Retrieve only the columns you need:
 
 ```bash
-aegis query "SELECT id FROM yaml('data.yml')"
+aegis query "SELECT id FROM yaml('data.yaml')"
 ```
 
 ```bash
-aegis query "SELECT id, name FROM yaml('data.yml')"
+aegis query "SELECT id, name FROM yaml('data.yaml')"
 ```
 
 ---
 
 ## Filter Rows
 
-Retrieve records matching a condition:
+AQL supports the following filter operators when querying CSV files:
+
+| Operator | Description               |
+| -------- | ------------------------- |
+| `=`      | Equal to                  |
+| `!=`     | Not equal to              |
+| `>`      | Greater than              |
+| `>=`     | Greater than or equal to  |
+| `<`      | Less than                 |
+| `<=`     | Less than or equal to     |
+| `IN`     | Match any value in a list |
+
+### Equality
 
 ```bash
-aegis query "SELECT * FROM yaml('data.yml') WHERE id = 1"
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id = 1"
 ```
 
-Filter by multiple values:
+### Not Equal
 
 ```bash
-aegis query "SELECT * FROM yaml('data.yml') WHERE id IN [1, 5]"
+aegis query "SELECT * FROM yaml('data.yaml') WHERE department != 'Sales'"
+```
+
+### Greater Than
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id > 100"
+```
+
+### Greater Than or Equal
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id >= 100"
+```
+
+### Less Than
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id < 100"
+```
+
+### Less Than or Equal
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id <= 100"
+```
+
+### IN
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id IN [1, 5]"
 ```
 
 ---
 
-## Query yml Data from Standard Input
+## Query CSV Data from Standard Input
 
-AQL can read yml data directly from stdin.
+AQL can read CSV data directly from stdin.
 
 Pipe a file into AQL:
 
 ```bash
-cat data.yml | aegis query "SELECT *"
+cat data.yaml | aegis query "SELECT *"
 ```
 
 Explicitly reference stdin:
 
 ```bash
-cat data.yml | aegis query "SELECT * FROM stdin"
+cat data.yaml | aegis query "SELECT * FROM stdin"
 ```
 
 Select specific columns:
 
 ```bash
-cat data.yml | aegis query "SELECT id, name FROM stdin"
+cat data.yaml | aegis query "SELECT id, name FROM stdin"
 ```
 
 Apply filters:
 
 ```bash
-cat data.yml | aegis query "SELECT * FROM stdin WHERE id = 1"
+cat data.yaml | aegis query "SELECT * FROM stdin WHERE id = 1"
+```
+
+```bash
+cat data.yaml | aegis query "SELECT * FROM stdin WHERE id > 10"
+```
+
+```bash
+cat data.yaml | aegis query "SELECT * FROM stdin WHERE id IN [1, 5]"
 ```
 
 ---
 
-## Example yml File
+## Example CSV File
 
-```yml
+```yaml
 id,name,email
 1,Alice,alice@example.com
 2,Bob,bob@example.com
@@ -126,7 +176,7 @@ id,name,email
 Query:
 
 ```bash
-aegis query "SELECT id, name FROM yaml('data.yml')"
+aegis query "SELECT id, name FROM yaml('data.yaml')"
 ```
 
 Result:
@@ -146,13 +196,13 @@ Result:
 Inspect available columns:
 
 ```bash
-aegis query "DESCRIBE yaml('data.yml')"
+aegis query "DESCRIBE yaml('data.yaml')"
 ```
 
 Then query the contents:
 
 ```bash
-aegis query "SELECT * FROM yaml('data.yml')"
+aegis query "SELECT * FROM yaml('data.yaml')"
 ```
 
 ---
@@ -160,15 +210,39 @@ aegis query "SELECT * FROM yaml('data.yml')"
 ### Extract Specific Data
 
 ```bash
-aegis query "SELECT id, email FROM yaml('data.yml')"
+aegis query "SELECT id, email FROM yaml('data.yaml')"
 ```
 
 ---
 
-### Filter Records
+### Find a Specific Record
 
 ```bash
-aegis query "SELECT * FROM yaml('data.yml') WHERE id = 1"
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id = 1"
+```
+
+---
+
+### Find Records Above a Threshold
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id > 100"
+```
+
+---
+
+### Exclude Records
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE department != 'Sales'"
+```
+
+---
+
+### Find Multiple Records
+
+```bash
+aegis query "SELECT * FROM yaml('data.yaml') WHERE id IN [1, 5]"
 ```
 
 ---
@@ -176,7 +250,7 @@ aegis query "SELECT * FROM yaml('data.yml') WHERE id = 1"
 ### Process Data in a Pipeline
 
 ```bash
-cat data.yml | aegis query "SELECT * FROM stdin"
+cat data.yaml | aegis query "SELECT * FROM stdin"
 ```
 
 Useful when integrating AQL into shell scripts and automation workflows.
@@ -188,29 +262,69 @@ Useful when integrating AQL into shell scripts and automation workflows.
 Select all columns:
 
 ```sql
-SELECT * FROM yaml('data.yml')
+SELECT * FROM yaml('data.yaml')
 ```
 
 Select specific columns:
 
 ```sql
 SELECT id, name
-FROM yaml('data.yml')
+FROM yaml('data.yaml')
 ```
 
-Filter records:
+Filter records by equality:
 
 ```sql
 SELECT *
-FROM yaml('data.yml')
+FROM yaml('data.yaml')
 WHERE id = 1
+```
+
+Filter records by inequality:
+
+```sql
+SELECT *
+FROM yaml('data.yaml')
+WHERE id != 1
+```
+
+Filter records above a value:
+
+```sql
+SELECT *
+FROM yaml('data.yaml')
+WHERE id > 100
+```
+
+Filter records at or above a value:
+
+```sql
+SELECT *
+FROM yaml('data.yaml')
+WHERE id >= 100
+```
+
+Filter records below a value:
+
+```sql
+SELECT *
+FROM yaml('data.yaml')
+WHERE id < 100
+```
+
+Filter records at or below a value:
+
+```sql
+SELECT *
+FROM yaml('data.yaml')
+WHERE id <= 100
 ```
 
 Filter multiple values:
 
 ```sql
 SELECT *
-FROM yaml('data.yml')
+FROM yaml('data.yaml')
 WHERE id IN [1, 5]
 ```
 
@@ -219,8 +333,9 @@ WHERE id IN [1, 5]
 ## Related Sources
 
 * json()
-* xml()
 * csv()
+* log()
+* xml()
 * stdin
 
-All file-based sources support the same AQL query patterns, allowing you to work with structured data regardless of format.
+All file-based sources support the same AQL query patterns, including projection, filtering, and value matching through comparison operators and the `IN` operator.

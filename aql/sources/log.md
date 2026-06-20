@@ -1,8 +1,8 @@
-# log
+# CSV
 
-The `log()` source allows AQL to query log files using standard SQL-inspired syntax.
+The `log()` source allows AQL to query CSV files using standard SQL-inspired syntax.
 
-log files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
+CSV files are treated as tabular data sources, making them accessible through the same query interface used for Aegis data, databases, and other supported formats.
 
 ---
 
@@ -14,7 +14,7 @@ List all available sources:
 aegis query "SHOW sources"
 ```
 
-Inspect a log file:
+Inspect a CSV file:
 
 ```bash
 aegis query "SHOW log('data.log')"
@@ -33,32 +33,158 @@ aegis query "DESCRIBE log('data.log')"
 Example output:
 
 ```text
-line
-line_number
+id
+name
+email
+department
+created_at
 ```
-AQL isn't trying to guess the structure.
-It simply gives us the raw lines and their positions within the file.
 
-By default log files will be parsed by newline. Future config file will allow custom parsing.
-
-Examplle config:
-
-```text
-[source.logs.app]
-
-path = "data.log"
-
-pattern = "keyvalue"
-```
+Column names are automatically derived from the CSV header row.
 
 ---
 
-## Query a log File
+## Query a CSV File
 
 Return all rows:
 
 ```bash
 aegis query "SELECT * FROM log('data.log')"
+```
+
+---
+
+## Select Specific Columns
+
+Retrieve only the columns you need:
+
+```bash
+aegis query "SELECT id FROM log('data.log')"
+```
+
+```bash
+aegis query "SELECT id, name FROM log('data.log')"
+```
+
+---
+
+## Filter Rows
+
+AQL supports the following filter operators when querying CSV files:
+
+| Operator | Description               |
+| -------- | ------------------------- |
+| `=`      | Equal to                  |
+| `!=`     | Not equal to              |
+| `>`      | Greater than              |
+| `>=`     | Greater than or equal to  |
+| `<`      | Less than                 |
+| `<=`     | Less than or equal to     |
+| `IN`     | Match any value in a list |
+
+### Equality
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id = 1"
+```
+
+### Not Equal
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE department != 'Sales'"
+```
+
+### Greater Than
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id > 100"
+```
+
+### Greater Than or Equal
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id >= 100"
+```
+
+### Less Than
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id < 100"
+```
+
+### Less Than or Equal
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id <= 100"
+```
+
+### IN
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id IN [1, 5]"
+```
+
+---
+
+## Query CSV Data from Standard Input
+
+AQL can read CSV data directly from stdin.
+
+Pipe a file into AQL:
+
+```bash
+cat data.log | aegis query "SELECT *"
+```
+
+Explicitly reference stdin:
+
+```bash
+cat data.log | aegis query "SELECT * FROM stdin"
+```
+
+Select specific columns:
+
+```bash
+cat data.log | aegis query "SELECT id, name FROM stdin"
+```
+
+Apply filters:
+
+```bash
+cat data.log | aegis query "SELECT * FROM stdin WHERE id = 1"
+```
+
+```bash
+cat data.log | aegis query "SELECT * FROM stdin WHERE id > 10"
+```
+
+```bash
+cat data.log | aegis query "SELECT * FROM stdin WHERE id IN [1, 5]"
+```
+
+---
+
+## Example CSV File
+
+```log
+id,name,email
+1,Alice,alice@example.com
+2,Bob,bob@example.com
+3,Carol,carol@example.com
+```
+
+Query:
+
+```bash
+aegis query "SELECT id, name FROM log('data.log')"
+```
+
+Result:
+
+```text
+1 Alice
+2 Bob
+3 Carol
 ```
 
 ---
@@ -79,6 +205,52 @@ Then query the contents:
 aegis query "SELECT * FROM log('data.log')"
 ```
 
+---
+
+### Extract Specific Data
+
+```bash
+aegis query "SELECT id, email FROM log('data.log')"
+```
+
+---
+
+### Find a Specific Record
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id = 1"
+```
+
+---
+
+### Find Records Above a Threshold
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id > 100"
+```
+
+---
+
+### Exclude Records
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE department != 'Sales'"
+```
+
+---
+
+### Find Multiple Records
+
+```bash
+aegis query "SELECT * FROM log('data.log') WHERE id IN [1, 5]"
+```
+
+---
+
+### Process Data in a Pipeline
+
+```bash
+cat data.log | aegis query "SELECT * FROM stdin"
 ```
 
 Useful when integrating AQL into shell scripts and automation workflows.
@@ -93,13 +265,76 @@ Select all columns:
 SELECT * FROM log('data.log')
 ```
 
+Select specific columns:
+
+```sql
+SELECT id, name
+FROM log('data.log')
+```
+
+Filter records by equality:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id = 1
+```
+
+Filter records by inequality:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id != 1
+```
+
+Filter records above a value:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id > 100
+```
+
+Filter records at or above a value:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id >= 100
+```
+
+Filter records below a value:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id < 100
+```
+
+Filter records at or below a value:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id <= 100
+```
+
+Filter multiple values:
+
+```sql
+SELECT *
+FROM log('data.log')
+WHERE id IN [1, 5]
+```
+
 ---
 
 ## Related Sources
 
 * json()
 * xml()
-* csv()
-* config builder
+* yaml()
+* stdin
 
-All file-based sources support the same AQL query patterns, allowing you to work with unstructured data regardless of format.
+All file-based sources support the same AQL query patterns, including projection, filtering, and value matching through comparison operators and the `IN` operator.

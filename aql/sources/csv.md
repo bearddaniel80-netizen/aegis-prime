@@ -70,13 +70,55 @@ aegis query "SELECT id, name FROM csv('data.csv')"
 
 ## Filter Rows
 
-Retrieve records matching a condition:
+AQL supports the following filter operators when querying CSV files:
+
+| Operator | Description               |
+| -------- | ------------------------- |
+| `=`      | Equal to                  |
+| `!=`     | Not equal to              |
+| `>`      | Greater than              |
+| `>=`     | Greater than or equal to  |
+| `<`      | Less than                 |
+| `<=`     | Less than or equal to     |
+| `IN`     | Match any value in a list |
+
+### Equality
 
 ```bash
 aegis query "SELECT * FROM csv('data.csv') WHERE id = 1"
 ```
 
-Filter by multiple values:
+### Not Equal
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE department != 'Sales'"
+```
+
+### Greater Than
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id > 100"
+```
+
+### Greater Than or Equal
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id >= 100"
+```
+
+### Less Than
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id < 100"
+```
+
+### Less Than or Equal
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id <= 100"
+```
+
+### IN
 
 ```bash
 aegis query "SELECT * FROM csv('data.csv') WHERE id IN [1, 5]"
@@ -110,6 +152,14 @@ Apply filters:
 
 ```bash
 cat data.csv | aegis query "SELECT * FROM stdin WHERE id = 1"
+```
+
+```bash
+cat data.csv | aegis query "SELECT * FROM stdin WHERE id > 10"
+```
+
+```bash
+cat data.csv | aegis query "SELECT * FROM stdin WHERE id IN [1, 5]"
 ```
 
 ---
@@ -165,10 +215,34 @@ aegis query "SELECT id, email FROM csv('data.csv')"
 
 ---
 
-### Filter Records
+### Find a Specific Record
 
 ```bash
 aegis query "SELECT * FROM csv('data.csv') WHERE id = 1"
+```
+
+---
+
+### Find Records Above a Threshold
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id > 100"
+```
+
+---
+
+### Exclude Records
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE department != 'Sales'"
+```
+
+---
+
+### Find Multiple Records
+
+```bash
+aegis query "SELECT * FROM csv('data.csv') WHERE id IN [1, 5]"
 ```
 
 ---
@@ -198,12 +272,52 @@ SELECT id, name
 FROM csv('data.csv')
 ```
 
-Filter records:
+Filter records by equality:
 
 ```sql
 SELECT *
 FROM csv('data.csv')
 WHERE id = 1
+```
+
+Filter records by inequality:
+
+```sql
+SELECT *
+FROM csv('data.csv')
+WHERE id != 1
+```
+
+Filter records above a value:
+
+```sql
+SELECT *
+FROM csv('data.csv')
+WHERE id > 100
+```
+
+Filter records at or above a value:
+
+```sql
+SELECT *
+FROM csv('data.csv')
+WHERE id >= 100
+```
+
+Filter records below a value:
+
+```sql
+SELECT *
+FROM csv('data.csv')
+WHERE id < 100
+```
+
+Filter records at or below a value:
+
+```sql
+SELECT *
+FROM csv('data.csv')
+WHERE id <= 100
 ```
 
 Filter multiple values:
@@ -219,8 +333,9 @@ WHERE id IN [1, 5]
 ## Related Sources
 
 * json()
+* log()
 * xml()
 * yaml()
 * stdin
 
-All file-based sources support the same AQL query patterns, allowing you to work with structured data regardless of format.
+All file-based sources support the same AQL query patterns, including projection, filtering, and value matching through comparison operators and the `IN` operator.
