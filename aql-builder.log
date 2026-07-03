@@ -1,0 +1,80 @@
+aegis_prime/
+│
+├── cli/
+│   ├── __init__.py
+│   ├── main.py                 # entry point: aegis
+│   ├── query_cmd.py           # aegis query ...
+│   ├── builder/
+│   │   ├── __init__.py
+│   │   ├── interactive.py     # guided CLI flow (your builder)
+│   │   ├── prompts.py         # all input prompts + formatting
+│   │   ├── session.py         # stateful session handling
+│   │   └── autocomplete.py    # (future: fuzzy field search)
+│
+│
+├── core/
+│   ├── __init__.py
+│   ├── ast/
+│   │   ├── __init__.py
+│   │   ├── nodes.py           # Select, Where, OrderBy, etc.
+│   │   ├── state.py           # QueryState (or AST builder state)
+│   │   └── builder.py         # AST construction helpers
+│   │
+│   ├── compiler/
+│   │   ├── __init__.py
+│   │   ├── aql_compiler.py    # AST → AQL string
+│   │   └── formatter.py       # string formatting helpers
+│   │
+│   ├── engine/
+│   │   ├── __init__.py
+│   │   ├── executor.py        # runs query against data
+│   │   ├── planner.py         # (future: optimization layer)
+│   │   └── evaluator.py
+│   │
+│   └── schema/
+│       ├── __init__.py
+│       ├── registry.py        # sources: clusters, failures, tests
+│       ├── fields.py          # field metadata per source
+│       └── types.py
+│
+│
+├── adapters/
+│   ├── __init__.py
+│   ├── json_adapter.py        # json files → AQL input
+│   ├── stdin_adapter.py       # pipe input
+│   ├── file_adapter.py        # file sources
+│   └── future/
+│       ├── postgres.py
+│       ├── mongo.py
+│       └── neo4j.py
+│
+│
+├── api/
+│   ├── __init__.py
+│   ├── query_service.py       # programmatic API (non-CLI)
+│   └── response_models.py
+│
+│
+├── utils/
+│   ├── __init__.py
+│   ├── parsing.py
+│   ├── validation.py
+│   └── errors.py
+│
+│
+├── tests/
+│   ├── test_cli_builder.py
+│   ├── test_compiler.py
+│   ├── test_ast.py
+│   └── test_engine.py
+│
+│
+├── cases/                     # your AQL compliance tests
+│   ├── clusters/
+│   ├── failures/
+│   └── tests/
+│
+│
+├── pyproject.toml
+├── README.md
+└── aegis.py                   # optional thin CLI bootstrap

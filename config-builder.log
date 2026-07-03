@@ -1,0 +1,27 @@
+aegis_prime/config/
+│
+├── loader.py
+├── validator.py
+├── defaults.py
+├── errors.py
+│
+├── models/
+│   ├── root.py
+│   ├── source.py
+│   ├── format.py
+│   ├── transform.py
+│   ├── optimize.py
+│   ├── output.py
+│   ├── secrets.py
+│   └── query.py
+│
+├── resolvers/
+│   ├── env.py
+│   ├── secrets.py
+│   └── source.py
+│
+└── builder/
+    ├── cli.py
+    ├── prompts.py
+    ├── generator.py
+    └── writer.py

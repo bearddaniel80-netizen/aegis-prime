@@ -1,0 +1,27 @@
+# FREE
+stdin
+file
+json
+csv
+duckdb
+sqlite
+
+# PRO
+postgres
+mysql
+mssql
+oracle
+firebird
+
+# ENTERPRISE
+snowflake
+bigquery
+redshift
+databricks
+trino
+
+# STREaming 
+kafka
+rabbitmq
+pulsar
+kinesis

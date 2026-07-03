@@ -7,10 +7,68 @@
 ![Status](https://img.shields.io/badge/status-production--ready-success)
 
 ---
+## 🏗️ Project Structure
+
+Aegis consists of several complementary components:
+
+| Component | Purpose |
+|------------|---------|
+| Aegis Core | Test execution and orchestration |
+| Aegis Prime | Failure intelligence and AI analysis |
+| AQL | Universal query language for systems, data, APIs, files, and infrastructure |
+| AQL Compliance Framework | Certification and regression-testing system for AQL implementations, dialects, sources, and future connect |
+
+➡️ See the AQL documentation:
+   ./aql/README.md
+
+➡️ See the AQL Compliance Framework documentation:
+   ./aql-compliance.md
+---
 
 # ⚡ Aegis
 
 ## Testing Intelligence for Modern Engineering Teams
+
+### 📦 Installation
+
+Build:
+
+```bash
+docker build \
+    --target runtime \
+    -t prime .
+```
+
+Run:
+
+```bash
+docker run -ti --rm \
+    -p 80:80 \
+    -v ./output:/app/data \
+    prime bash
+```
+---
+
+### 🎥 Watch Aegis in Action
+
+See real demos, walkthroughs, and feature showcases:
+
+➡️ [YouTube Playlist](https://www.youtube.com/playlist?list=PL2UX2VsIBUY0POiTGRRpyHesG_Oezvkba)
+
+### Table of Contents
+
+- Why Aegis Exists
+- What Aegis Does
+- AQL (Aegis Query Language)
+- Hero Architecture
+- What Makes It Different
+- Real-World Impact
+- Example Workflow
+- Designed for Modern Engineering
+- Vision
+- Roadmap
+- Built For
+- License
 
 > Turn failing tests into clear, actionable engineering decisions — not noise.
 
@@ -67,6 +125,11 @@ Surfaces the most impactful failures first — not just the first one that appea
 
 Turns technical failures into human-readable explanations and likely root causes.
 
+## 🔍 AQL (Aegis Query Language)
+
+Aegis includes AQL, a universal query language that allows engineers to query databases, APIs, files, streams, and infrastructure through a single interface.
+
+➡️ See the full AQL documentation: [AQL README](./aql/README.md)
 ---
 
 ## 🧭 Hero Architecture
