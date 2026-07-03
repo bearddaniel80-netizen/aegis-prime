@@ -1,0 +1,197 @@
+add scalar functions
+--------------------
+YEAR
+MONTH
+DAY
+DATEDIFF
+
+DISTINCT
+x HAVING
+JOIN
+UNION (if you ever decide to)
+OFFSET
+TOP
+SAMPLE
+WINDOW functions
+PIVOT
+UNPIVOT
+validation/
+│
+├── pipeline.py
+├── validator.py
+├── registry.py
+│
+├── query/
+│   ├── select_validator.py
+│   ├── from_validator.py
+│   ├── where_validator.py
+│   ├── groupby_validator.py
+│   ├── having_validator.py
+│   ├── orderby_validator.py
+│   └── limit_validator.py
+│
+├── expressions/
+│   ├── aggregate_validator.py
+│   ├── function_validator.py
+│   ├── identifier_validator.py
+│   ├── literal_validator.py
+│   └── alias_validator.py
+│
+└── rules/
+    ├── aggregate_in_where.py
+    ├── aggregate_without_groupby.py
+    ├── unknown_column.py
+    ├── unknown_function.py
+    ├── duplicate_alias.py
+    ├── ambiguous_column.py
+    └── type_mismatch.py
+---------------------
+# analysis context
+---------------------
+aegis_prime/
+└── aql/
+    └── context/
+        ├── __init__.py
+        X analysis_context.py
+        x diagnostics.py
+        ├── statistics.py
+        └── artifacts.py
+---------------------
+# OPTIMIZERS
+---------------------
+PredicatePushdown
+
+ProjectionPushdown
+
+ConstantFolding
+
+AliasInlining
+
+DeadProjectionRemoval
+-------------------
+# PLANNERS
+--------------------
+aql/
+    planning/
+        base.py
+        planner.py
+        registry.py
+        nodes/
+-----------------------
+aegis_prime/
+└── aql/
+    └── validation/
+        ├── __init__.py
+        ├── analyzer.py              # QueryAnalyzer helpers
+        ├── context.py               # ValidationContext
+        ├── pipeline.py              # ValidationPipeline
+        ├── registry.py              # @register_validator
+        ├── base.py                  # Validator base class
+        ├── severity.py              # Error, Warning, Info
+        ├── diagnostic.py            # Diagnostic node
+        ├── exception.py             # ValidationError, SemanticError...
+        │
+        ├── syntax/
+        │   ├── __init__.py
+        │   ├── identifier.py
+        │   ├── alias.py
+        │   ├── function.py
+        │   ├── literal.py
+        │   └── expression.py
+        │
+        ├── semantic/
+        │   ├── __init__.py
+        │   ├── aggregate.py
+        │   ├── groupby.py
+        │   ├── having.py
+        │   ├── orderby.py
+        │   ├── where.py
+        │   ├── projection.py
+        │   ├── distinct.py
+        │   ├── limit.py
+        │   └── join.py              # future
+        │
+        ├── source/
+        │   ├── __init__.py
+        │   ├── source_exists.py
+        │   ├── capabilities.py
+        │   ├── schema.py
+        │   └── permissions.py
+        │
+        ├── optimization/
+        │   ├── __init__.py
+        │   ├── predicate_pushdown.py
+        │   ├── projection_pushdown.py
+        │   ├── constant_folding.py
+        │   ├── dead_projection.py
+        │   └── unused_alias.py
+        │
+        ├── statistics/
+        │   ├── __init__.py
+        │   ├── query_stats.py
+        │   ├── cost_estimator.py
+        │   ├── dependency_graph.py
+        │   └── complexity.py
+        │
+        ├── snapshot/
+        │   ├── __init__.py
+        │   ├── writer.py
+        │   ├── loader.py
+        │   ├── diff.py
+        │   └── history.py
+        │
+        └── render/
+            ├── tree.py
+            ├── json.py
+            ├── markdown.py
+            └── rich.py
+
+Document Error Codes
+---------------------
+EE = engine/executor
+EHS = engine/handlers/show
+LL = lexer/lexer
+PSCPF = parser/strategies/select_clauses/parser/_from
+PSCPP = parser/strategies/select_clauses/parser/projection
+PHR = parser/expressions/handlers/regex
+PEP = parser/expressions/parser
+PC = parser/context
+PP = parser/parser
+
+Changes
+-----------
+Dockerfile
+pyproject.toml
+context
+engine/exe_source
+engine/executor
+engine/query_engine
+engine/handlers/base
+engine/handlers/query
+engine/handlers/show
+engine/handlers/query_handlers
+evalulattors/handlers/regex
+language/keywords
+language/tokens
+language/ast/attribute
+language/ast/function_call
+language/ast/identifier
+language/ast/parsed_value
+language/ast/expressions/operators
+language/ast/statements/query
+language/ast/expressions/group_by
+language/ast/expressions/order_by
+lexer/lexer
+lexer/readers/operator
+link/aggregates
+link/scalars
+parser/context
+parser/expressions/parser
+parser/expressions/handlers
+parser/strategies/basee
+parser/strategies/describe
+parser/strategies/select
+parser/strategies/show
+parser/strategies/select_clauses
+parser/parser [file]
+validate
