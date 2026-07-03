@@ -1,0 +1,14 @@
+version = "1.0"
+
+[engine]
+timeout_ms = 5000
+
+[sources.stdin]
+type = "stdin"
+format = "auto"
+
+[query]
+limit = 100
+
+[debug]
+enabled = false

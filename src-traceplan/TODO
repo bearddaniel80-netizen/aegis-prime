@@ -1,0 +1,193 @@
+the exact traversal engine (BFS/impact/diff implementation)
+or the snapshot/versioning system (this is actually critical)
+Strategy           Capabilities
+--------------------------------------------
+impact             graph, traversal
+architecture       graph, services
+
+pipeline/
+│
+├── base.py
+├── context.py
+├── pipeline.py
+├── factory.py
+└── registry.py
+
+v0.0.4
+traceplan_core/
+│
+├── pipeline/
+│   ├── base.py
+│   ├── context.py
+│   ├── strategy.py
+│   └── pipeline.py
+│
+├── reports/
+│   ├── base.py
+│   ├── analysis.py
+│   ├── diff.py
+│   ├── summary.py
+│   └── snapshot.py
+│
+├── renderers/
+│   ├── rich.py
+│   ├── json.py
+│   ├── html.py
+│   └── markdown.py
+│
+├── graph/
+├── snapshots/
+├── compatibility/
+├── services/
+└── policies/
+
+v0.1.0
+traceplan/
+│
+├── cli/
+│   ├── __init__.py
+│   ├── graph.py
+│   ├── service.py
+│   ├── runtime.py
+│   ├── ci.py
+│   └── snapshot.py
+│
+├── graph/
+│   ├── model.py
+│   ├── snapshot.py
+│   ├── serializer.py
+│   ├── diff.py
+│   ├── delta.py
+│   │
+│   ├── build.py
+│   ├── analyze.py
+│   ├── impact.py
+│   ├── reverse_impact.py
+│   ├── flow.py
+│   ├── flow_diff.py
+│   ├── path.py
+│   ├── callers.py
+│   ├── callees.py
+│   │
+│   ├── metrics/
+│   │   ├── fan_in.py
+│   │   ├── fan_out.py
+│   │   ├── bottlenecks.py
+│   │   ├── reachability.py
+│   │   ├── stability.py
+│   │   └── risk.py
+│   │
+│   └── queries/
+│       ├── neighbors.py
+│       ├── descendants.py
+│       ├── ancestors.py
+│       └── shortest_path.py
+│
+├── extractors/
+│   ├── base.py
+│   │
+│   ├── python/
+│   │   ├── extractor.py
+│   │   ├── symbols.py
+│   │   ├── imports.py
+│   │   ├── calls.py
+│   │   ├── classes.py
+│   │   ├── functions.py
+│   │   └── fingerprints.py
+│   │
+│   ├── java/
+│   ├── javascript/
+│   ├── typescript/
+│   ├── go/
+│   └── csharp/
+│
+├── resolver/
+│   ├── symbol_table.py
+│   ├── resolver.py
+│   ├── imports.py
+│   ├── scope.py
+│   └── confidence.py
+│
+├── service/
+│   ├── detector.py
+│   ├── graph.py
+│   ├── impact.py
+│   ├── drift.py
+│   ├── topology.py
+│   └── coupling.py
+│
+├── runtime/
+│   ├── model.py
+│   ├── ingest.py
+│   ├── overlay.py
+│   ├── drift.py
+│   ├── coverage.py
+│   ├── traces.py
+│   ├── events.py
+│   └── reconciliation.py
+│
+├── policies/
+│   ├── model.py
+│   ├── engine.py
+│   ├── evaluator.py
+│   ├── violations.py
+│   │
+│   └── builtins/
+│       ├── bottleneck_growth.py
+│       ├── critical_path.py
+│       ├── service_sprawl.py
+│       ├── dead_code.py
+│       └── flow_stability.py
+│
+├── snapshots/
+│   ├── model.py
+│   ├── storage.py
+│   ├── manager.py
+│   ├── versioning.py
+│   └── compare.py
+│
+├── storage/
+│   ├── base.py
+│   │
+│   ├── sqlite/
+│   │   ├── repository.py
+│   │   ├── schema.py
+│   │   └── migrations.py
+│   │
+│   └── graph/
+│       ├── repository.py
+│       └── adapters.py
+│
+├── reports/
+│   ├── console.py
+│   ├── json.py
+│   ├── markdown.py
+│   ├── html.py
+│   └── sarif.py
+│
+├── config/
+│   ├── model.py
+│   ├── loader.py
+│   ├── validator.py
+│   └── defaults.py
+│
+├── plugins/
+│   ├── registry.py
+│   ├── extractor.py
+│   ├── policy.py
+│   └── runtime.py
+│
+├── utils/
+│   ├── hashing.py
+│   ├── filesystem.py
+│   ├── graph.py
+│   └── timing.py
+│
+└── tests/
+    ├── graph/
+    ├── extractors/
+    ├── resolver/
+    ├── service/
+    ├── runtime/
+    ├── policies/
+    └── integration/

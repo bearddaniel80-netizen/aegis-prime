@@ -1,0 +1,4 @@
+traceplan graph build src
+traceplan graph diff v1.json v2.json
+traceplan analyze node v2.json QueryPlanner
+traceplan snapshot list
